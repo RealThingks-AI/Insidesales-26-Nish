@@ -57,6 +57,16 @@ export default {
           border: "hsl(var(--sidebar-border))",
           ring: "hsl(var(--sidebar-ring))",
         },
+        calc: {
+          display: "hsl(var(--calc-display))",
+          "display-text": "hsl(var(--calc-display-text))",
+          "button-number": "hsl(var(--calc-button-number))",
+          "button-number-hover": "hsl(var(--calc-button-number-hover))",
+          "button-operator": "hsl(var(--calc-button-operator))",
+          "button-operator-hover": "hsl(var(--calc-button-operator-hover))",
+          "button-special": "hsl(var(--calc-button-special))",
+          "button-special-hover": "hsl(var(--calc-button-special-hover))",
+        },
       },
       borderRadius: {
         lg: "var(--radius)",
