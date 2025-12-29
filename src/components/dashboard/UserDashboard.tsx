@@ -108,7 +108,8 @@ const UserDashboard = () => {
   useEffect(() => {
     const updateWidth = () => {
       if (containerRef.current) {
-        setContainerWidth(containerRef.current.offsetWidth - 48);
+        // Use full container width for the grid (no subtraction needed)
+        setContainerWidth(containerRef.current.offsetWidth);
       }
     };
     updateWidth();
@@ -1305,7 +1306,7 @@ const UserDashboard = () => {
   };
 
   return (
-    <div className="p-6 space-y-8" ref={containerRef}>
+    <div className="p-6 space-y-8 w-full" ref={containerRef}>
       {/* Welcome Header */}
       <div className="flex items-center justify-between flex-wrap gap-2">
         <div className="min-w-0 flex-1">
