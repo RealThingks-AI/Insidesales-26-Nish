@@ -770,38 +770,38 @@ const UserDashboard = () => {
     switch (key) {
       case "leads":
         return (
-          <Card className="h-full hover:shadow-lg transition-shadow animate-fade-in overflow-hidden">
-            <CardHeader className="flex flex-row items-center justify-between py-2 px-3">
+          <Card className="h-full flex flex-col hover:shadow-lg transition-shadow animate-fade-in overflow-hidden">
+            <CardHeader className="flex flex-row items-center justify-between py-2 px-3 flex-shrink-0">
               <CardTitle className="text-sm font-medium">My Leads</CardTitle>
               <Button variant="outline" size="sm" className="h-6 text-xs gap-1" onClick={() => !isResizeMode && setLeadModalOpen(true)}>
                 <Plus className="w-3 h-3" /> Add Lead
               </Button>
             </CardHeader>
-            <CardContent className="px-3 pb-3 pt-0">
-              <div className="grid grid-cols-2 gap-1.5">
+            <CardContent className="px-3 pb-3 pt-0 flex-1 flex flex-col">
+              <div className="grid grid-cols-2 gap-1.5 flex-1">
                 <div 
-                  className="text-center p-2 bg-blue-50 dark:bg-blue-950/20 rounded cursor-pointer hover:bg-blue-100 dark:hover:bg-blue-950/40 transition-colors"
+                  className="text-center p-2 bg-blue-50 dark:bg-blue-950/20 rounded cursor-pointer hover:bg-blue-100 dark:hover:bg-blue-950/40 transition-colors flex flex-col justify-center"
                   onClick={(e) => { e.stopPropagation(); navigate('/leads?status=New&owner=me'); }}
                 >
                   <p className="text-lg font-bold text-blue-600">{leadsData?.new || 0}</p>
                   <p className="text-[10px] text-muted-foreground">New</p>
                 </div>
                 <div 
-                  className="text-center p-2 bg-yellow-50 dark:bg-yellow-950/20 rounded cursor-pointer hover:bg-yellow-100 dark:hover:bg-yellow-950/40 transition-colors"
+                  className="text-center p-2 bg-yellow-50 dark:bg-yellow-950/20 rounded cursor-pointer hover:bg-yellow-100 dark:hover:bg-yellow-950/40 transition-colors flex flex-col justify-center"
                   onClick={(e) => { e.stopPropagation(); navigate('/leads?status=Attempted&owner=me'); }}
                 >
                   <p className="text-lg font-bold text-yellow-600">{leadsData?.attempted || 0}</p>
                   <p className="text-[10px] text-muted-foreground">Attempted</p>
                 </div>
                 <div 
-                  className="text-center p-2 bg-orange-50 dark:bg-orange-950/20 rounded cursor-pointer hover:bg-orange-100 dark:hover:bg-orange-950/40 transition-colors"
+                  className="text-center p-2 bg-orange-50 dark:bg-orange-950/20 rounded cursor-pointer hover:bg-orange-100 dark:hover:bg-orange-950/40 transition-colors flex flex-col justify-center"
                   onClick={(e) => { e.stopPropagation(); navigate('/leads?status=Follow-up&owner=me'); }}
                 >
                   <p className="text-lg font-bold text-orange-600">{leadsData?.followUp || 0}</p>
                   <p className="text-[10px] text-muted-foreground">Follow-Up</p>
                 </div>
                 <div 
-                  className="text-center p-2 bg-green-50 dark:bg-green-950/20 rounded cursor-pointer hover:bg-green-100 dark:hover:bg-green-950/40 transition-colors"
+                  className="text-center p-2 bg-green-50 dark:bg-green-950/20 rounded cursor-pointer hover:bg-green-100 dark:hover:bg-green-950/40 transition-colors flex flex-col justify-center"
                   onClick={(e) => { e.stopPropagation(); navigate('/leads?status=Qualified&owner=me'); }}
                 >
                   <p className="text-lg font-bold text-green-600">{leadsData?.qualified || 0}</p>
@@ -814,38 +814,38 @@ const UserDashboard = () => {
 
       case "contacts":
         return (
-          <Card className="h-full hover:shadow-lg transition-shadow animate-fade-in overflow-hidden">
-            <CardHeader className="flex flex-row items-center justify-between py-2 px-3">
+          <Card className="h-full flex flex-col hover:shadow-lg transition-shadow animate-fade-in overflow-hidden">
+            <CardHeader className="flex flex-row items-center justify-between py-2 px-3 flex-shrink-0">
               <CardTitle className="text-sm font-medium">My Contacts</CardTitle>
               <Button variant="outline" size="sm" className="h-6 text-xs gap-1" onClick={() => !isResizeMode && setContactModalOpen(true)}>
                 <Plus className="w-3 h-3" /> Add Contact
               </Button>
             </CardHeader>
-            <CardContent className="px-3 pb-3 pt-0">
-              <div className="grid grid-cols-2 gap-1.5">
+            <CardContent className="px-3 pb-3 pt-0 flex-1 flex flex-col">
+              <div className="grid grid-cols-2 gap-1.5 flex-1">
                 <div 
-                  className="text-center p-2 bg-blue-50 dark:bg-blue-950/20 rounded cursor-pointer hover:bg-blue-100 dark:hover:bg-blue-950/40 transition-colors"
+                  className="text-center p-2 bg-blue-50 dark:bg-blue-950/20 rounded cursor-pointer hover:bg-blue-100 dark:hover:bg-blue-950/40 transition-colors flex flex-col justify-center"
                   onClick={(e) => { e.stopPropagation(); navigate('/contacts?source=Website&owner=me'); }}
                 >
                   <p className="text-lg font-bold text-blue-600">{contactsData?.bySource?.website || 0}</p>
                   <p className="text-[10px] text-muted-foreground">Website</p>
                 </div>
                 <div 
-                  className="text-center p-2 bg-purple-50 dark:bg-purple-950/20 rounded cursor-pointer hover:bg-purple-100 dark:hover:bg-purple-950/40 transition-colors"
+                  className="text-center p-2 bg-purple-50 dark:bg-purple-950/20 rounded cursor-pointer hover:bg-purple-100 dark:hover:bg-purple-950/40 transition-colors flex flex-col justify-center"
                   onClick={(e) => { e.stopPropagation(); navigate('/contacts?source=Referral&owner=me'); }}
                 >
                   <p className="text-lg font-bold text-purple-600">{contactsData?.bySource?.referral || 0}</p>
                   <p className="text-[10px] text-muted-foreground">Referral</p>
                 </div>
                 <div 
-                  className="text-center p-2 bg-cyan-50 dark:bg-cyan-950/20 rounded cursor-pointer hover:bg-cyan-100 dark:hover:bg-cyan-950/40 transition-colors"
+                  className="text-center p-2 bg-cyan-50 dark:bg-cyan-950/20 rounded cursor-pointer hover:bg-cyan-100 dark:hover:bg-cyan-950/40 transition-colors flex flex-col justify-center"
                   onClick={(e) => { e.stopPropagation(); navigate('/contacts?source=LinkedIn&owner=me'); }}
                 >
                   <p className="text-lg font-bold text-cyan-600">{contactsData?.bySource?.linkedin || 0}</p>
                   <p className="text-[10px] text-muted-foreground">LinkedIn</p>
                 </div>
                 <div 
-                  className="text-center p-2 bg-gray-50 dark:bg-gray-950/20 rounded cursor-pointer hover:bg-gray-100 dark:hover:bg-gray-950/40 transition-colors"
+                  className="text-center p-2 bg-gray-50 dark:bg-gray-950/20 rounded cursor-pointer hover:bg-gray-100 dark:hover:bg-gray-950/40 transition-colors flex flex-col justify-center"
                   onClick={(e) => { e.stopPropagation(); navigate('/contacts?source=Other&owner=me'); }}
                 >
                   <p className="text-lg font-bold text-gray-600">{contactsData?.bySource?.other || 0}</p>
@@ -858,38 +858,38 @@ const UserDashboard = () => {
 
       case "deals":
         return (
-          <Card className="h-full hover:shadow-lg transition-shadow animate-fade-in overflow-hidden">
-            <CardHeader className="flex flex-row items-center justify-between py-2 px-3">
+          <Card className="h-full flex flex-col hover:shadow-lg transition-shadow animate-fade-in overflow-hidden">
+            <CardHeader className="flex flex-row items-center justify-between py-2 px-3 flex-shrink-0">
               <CardTitle className="text-sm font-medium">My Deals</CardTitle>
               <Button variant="outline" size="sm" className="h-6 text-xs gap-1" onClick={() => !isResizeMode && navigate('/deals')}>
                 View All
               </Button>
             </CardHeader>
-            <CardContent className="px-3 pb-3 pt-0">
-              <div className="grid grid-cols-2 gap-1.5">
+            <CardContent className="px-3 pb-3 pt-0 flex-1 flex flex-col">
+              <div className="grid grid-cols-2 gap-1.5 flex-1">
                 <div 
-                  className="text-center p-2 bg-blue-50 dark:bg-blue-950/20 rounded cursor-pointer hover:bg-blue-100 dark:hover:bg-blue-950/40 transition-colors"
+                  className="text-center p-2 bg-blue-50 dark:bg-blue-950/20 rounded cursor-pointer hover:bg-blue-100 dark:hover:bg-blue-950/40 transition-colors flex flex-col justify-center"
                   onClick={(e) => { e.stopPropagation(); navigate('/deals?stage=RFQ&owner=me'); }}
                 >
                   <p className="text-lg font-bold text-blue-600">{dealsData?.byStage?.rfq || 0}</p>
                   <p className="text-[10px] text-muted-foreground">RFQ</p>
                 </div>
                 <div 
-                  className="text-center p-2 bg-yellow-50 dark:bg-yellow-950/20 rounded cursor-pointer hover:bg-yellow-100 dark:hover:bg-yellow-950/40 transition-colors"
+                  className="text-center p-2 bg-yellow-50 dark:bg-yellow-950/20 rounded cursor-pointer hover:bg-yellow-100 dark:hover:bg-yellow-950/40 transition-colors flex flex-col justify-center"
                   onClick={(e) => { e.stopPropagation(); navigate('/deals?stage=Offered&owner=me'); }}
                 >
                   <p className="text-lg font-bold text-yellow-600">{dealsData?.byStage?.offered || 0}</p>
                   <p className="text-[10px] text-muted-foreground">Offered</p>
                 </div>
                 <div 
-                  className="text-center p-2 bg-green-50 dark:bg-green-950/20 rounded cursor-pointer hover:bg-green-100 dark:hover:bg-green-950/40 transition-colors"
+                  className="text-center p-2 bg-green-50 dark:bg-green-950/20 rounded cursor-pointer hover:bg-green-100 dark:hover:bg-green-950/40 transition-colors flex flex-col justify-center"
                   onClick={(e) => { e.stopPropagation(); navigate('/deals?stage=Won&owner=me'); }}
                 >
                   <p className="text-lg font-bold text-green-600">{dealsData?.byStage?.won || 0}</p>
                   <p className="text-[10px] text-muted-foreground">Won</p>
                 </div>
                 <div 
-                  className="text-center p-2 bg-red-50 dark:bg-red-950/20 rounded cursor-pointer hover:bg-red-100 dark:hover:bg-red-950/40 transition-colors"
+                  className="text-center p-2 bg-red-50 dark:bg-red-950/20 rounded cursor-pointer hover:bg-red-100 dark:hover:bg-red-950/40 transition-colors flex flex-col justify-center"
                   onClick={(e) => { e.stopPropagation(); navigate('/deals?stage=Lost&owner=me'); }}
                 >
                   <p className="text-lg font-bold text-red-600">{dealsData?.byStage?.lost || 0}</p>
@@ -902,38 +902,38 @@ const UserDashboard = () => {
 
       case "accountsSummary":
         return (
-          <Card className="h-full hover:shadow-lg transition-shadow animate-fade-in overflow-hidden">
-            <CardHeader className="flex flex-row items-center justify-between py-2 px-3">
+          <Card className="h-full flex flex-col hover:shadow-lg transition-shadow animate-fade-in overflow-hidden">
+            <CardHeader className="flex flex-row items-center justify-between py-2 px-3 flex-shrink-0">
               <CardTitle className="text-sm font-medium">My Accounts</CardTitle>
               <Button variant="outline" size="sm" className="h-6 text-xs gap-1" onClick={() => !isResizeMode && setAccountModalOpen(true)}>
                 <Plus className="w-3 h-3" /> Add Account
               </Button>
             </CardHeader>
-            <CardContent className="px-3 pb-3 pt-0">
-              <div className="grid grid-cols-2 gap-1.5">
+            <CardContent className="px-3 pb-3 pt-0 flex-1 flex flex-col">
+              <div className="grid grid-cols-2 gap-1.5 flex-1">
                 <div 
-                  className="text-center p-2 bg-blue-50 dark:bg-blue-950/20 rounded cursor-pointer hover:bg-blue-100 dark:hover:bg-blue-950/40 transition-colors"
+                  className="text-center p-2 bg-blue-50 dark:bg-blue-950/20 rounded cursor-pointer hover:bg-blue-100 dark:hover:bg-blue-950/40 transition-colors flex flex-col justify-center"
                   onClick={(e) => { e.stopPropagation(); navigate('/accounts?status=New&owner=me'); }}
                 >
                   <p className="text-lg font-bold text-blue-600">{accountsData?.byStatus?.new || 0}</p>
                   <p className="text-[10px] text-muted-foreground">New</p>
                 </div>
                 <div 
-                  className="text-center p-2 bg-yellow-50 dark:bg-yellow-950/20 rounded cursor-pointer hover:bg-yellow-100 dark:hover:bg-yellow-950/40 transition-colors"
+                  className="text-center p-2 bg-yellow-50 dark:bg-yellow-950/20 rounded cursor-pointer hover:bg-yellow-100 dark:hover:bg-yellow-950/40 transition-colors flex flex-col justify-center"
                   onClick={(e) => { e.stopPropagation(); navigate('/accounts?status=Working&owner=me'); }}
                 >
                   <p className="text-lg font-bold text-yellow-600">{accountsData?.byStatus?.working || 0}</p>
                   <p className="text-[10px] text-muted-foreground">Working</p>
                 </div>
                 <div 
-                  className="text-center p-2 bg-red-50 dark:bg-red-950/20 rounded cursor-pointer hover:bg-red-100 dark:hover:bg-red-950/40 transition-colors"
+                  className="text-center p-2 bg-red-50 dark:bg-red-950/20 rounded cursor-pointer hover:bg-red-100 dark:hover:bg-red-950/40 transition-colors flex flex-col justify-center"
                   onClick={(e) => { e.stopPropagation(); navigate('/accounts?status=Hot&owner=me'); }}
                 >
                   <p className="text-lg font-bold text-red-600">{accountsData?.byStatus?.hot || 0}</p>
                   <p className="text-[10px] text-muted-foreground">Hot</p>
                 </div>
                 <div 
-                  className="text-center p-2 bg-green-50 dark:bg-green-950/20 rounded cursor-pointer hover:bg-green-100 dark:hover:bg-green-950/40 transition-colors"
+                  className="text-center p-2 bg-green-50 dark:bg-green-950/20 rounded cursor-pointer hover:bg-green-100 dark:hover:bg-green-950/40 transition-colors flex flex-col justify-center"
                   onClick={(e) => { e.stopPropagation(); navigate('/accounts?status=Nurture&owner=me'); }}
                 >
                   <p className="text-lg font-bold text-green-600">{accountsData?.byStatus?.nurture || 0}</p>
@@ -946,12 +946,12 @@ const UserDashboard = () => {
 
       case "actionItems":
         return (
-          <Card className="h-full animate-fade-in overflow-hidden">
-            <CardHeader className="flex flex-row items-center justify-between py-2 px-3">
+          <Card className="h-full flex flex-col animate-fade-in overflow-hidden">
+            <CardHeader className="flex flex-row items-center justify-between py-2 px-3 flex-shrink-0">
               <CardTitle className="text-sm font-medium">Action Items</CardTitle>
               <Clock className="w-4 h-4 text-orange-600" />
             </CardHeader>
-            <CardContent className="px-3 pb-3 pt-0 space-y-1.5">
+            <CardContent className="px-3 pb-3 pt-0 flex-1 flex flex-col space-y-1.5">
               <div className="flex items-center justify-between">
                 <span className="text-lg font-bold">{actionItemsData?.total || 0}</span>
                 <div className="flex gap-1 text-[10px]">
@@ -968,7 +968,7 @@ const UserDashboard = () => {
                 </div>
               </div>
               {actionItemsData?.topItems && actionItemsData.topItems.length > 0 && (
-                <div className="space-y-0.5">
+                <div className="space-y-0.5 flex-1 overflow-auto">
                   {actionItemsData.topItems.slice(0, 2).map((item: any) => (
                     <div key={item.id} className="text-[10px] p-1.5 rounded bg-muted/50 truncate">
                       {item.next_action}
@@ -982,11 +982,11 @@ const UserDashboard = () => {
 
       case "quickActions":
         return (
-          <Card className="h-full animate-fade-in overflow-hidden">
-            <CardHeader className="py-2 px-3">
+          <Card className="h-full flex flex-col animate-fade-in overflow-hidden">
+            <CardHeader className="py-2 px-3 flex-shrink-0">
               <CardTitle className="text-sm font-medium">Quick Actions</CardTitle>
             </CardHeader>
-            <CardContent className="grid grid-cols-2 gap-1.5 px-3 pb-3 pt-0">
+            <CardContent className="grid grid-cols-2 gap-1.5 px-3 pb-3 pt-0 flex-1 content-start">
               <Button variant="outline" size="sm" className="justify-start gap-1.5 h-7 text-xs" onClick={() => !isResizeMode && setLeadModalOpen(true)}>
                 <Plus className="w-3 h-3" /> Lead
               </Button>
@@ -1005,12 +1005,12 @@ const UserDashboard = () => {
 
       case "myPipeline":
         return (
-          <Card className="h-full hover:shadow-lg transition-shadow cursor-pointer animate-fade-in overflow-hidden" onClick={() => !isResizeMode && navigate('/deals')}>
-            <CardHeader className="flex flex-row items-center justify-between py-2 px-3">
+          <Card className="h-full flex flex-col hover:shadow-lg transition-shadow cursor-pointer animate-fade-in overflow-hidden" onClick={() => !isResizeMode && navigate('/deals')}>
+            <CardHeader className="flex flex-row items-center justify-between py-2 px-3 flex-shrink-0">
               <CardTitle className="text-sm font-medium">My Pipeline</CardTitle>
               <TrendingUp className="w-4 h-4 text-emerald-600" />
             </CardHeader>
-            <CardContent className="px-3 pb-3 pt-0 space-y-1.5">
+            <CardContent className="px-3 pb-3 pt-0 flex-1 flex flex-col justify-center space-y-1.5">
               <div className="text-lg font-bold">{formatCurrency(dealsData?.totalPipeline || 0)}</div>
               <div className="flex items-center justify-between text-[10px]">
                 <span className="text-muted-foreground">{dealsData?.active || 0} active deals</span>
@@ -1025,17 +1025,17 @@ const UserDashboard = () => {
       case "todaysAgenda":
         const totalAgendaItems = (todaysMeetings?.length || 0) + (todaysTasks?.length || 0) + (overdueTasks?.length || 0);
         return (
-          <Card className="h-full animate-fade-in overflow-hidden">
-            <CardHeader className="flex flex-row items-center justify-between py-2 px-3">
+          <Card className="h-full flex flex-col animate-fade-in overflow-hidden">
+            <CardHeader className="flex flex-row items-center justify-between py-2 px-3 flex-shrink-0">
               <CardTitle className="flex items-center gap-1.5 text-sm font-medium">
                 <CalendarClock className="w-4 h-4 text-primary" />
                 Today's Agenda
               </CardTitle>
               <span className="text-[10px] text-muted-foreground">{format(new Date(), 'EEE, MMM d')}</span>
             </CardHeader>
-            <CardContent className="px-3 pb-3 pt-0">
+            <CardContent className="px-3 pb-3 pt-0 flex-1 flex flex-col overflow-auto">
               {totalAgendaItems > 0 ? (
-                <div className="space-y-1.5">
+                <div className="space-y-1.5 flex-1">
                   {(overdueTasks?.length || 0) > 0 && (
                     <div>
                       <p className="text-[10px] font-medium text-red-600 mb-0.5">⚠️ Overdue ({overdueTasks?.length})</p>
@@ -1070,12 +1070,14 @@ const UserDashboard = () => {
                   )}
                 </div>
               ) : (
-                <EmptyState
-                  title="Clear day ahead"
-                  description="No meetings or tasks scheduled for today"
-                  illustration="calendar"
-                  variant="compact"
-                />
+                <div className="flex-1 flex items-center justify-center">
+                  <EmptyState
+                    title="Clear day ahead"
+                    description="No meetings or tasks scheduled for today"
+                    illustration="calendar"
+                    variant="compact"
+                  />
+                </div>
               )}
             </CardContent>
           </Card>
@@ -1083,38 +1085,38 @@ const UserDashboard = () => {
 
       case "upcomingMeetings":
         return (
-          <Card className="h-full hover:shadow-lg transition-shadow animate-fade-in overflow-hidden">
-            <CardHeader className="flex flex-row items-center justify-between py-2 px-3">
+          <Card className="h-full flex flex-col hover:shadow-lg transition-shadow animate-fade-in overflow-hidden">
+            <CardHeader className="flex flex-row items-center justify-between py-2 px-3 flex-shrink-0">
               <CardTitle className="text-sm font-medium">My Meetings</CardTitle>
               <Button variant="outline" size="sm" className="h-6 text-xs gap-1" onClick={() => !isResizeMode && setCreateMeetingModalOpen(true)}>
                 <Plus className="w-3 h-3" /> Add Meeting
               </Button>
             </CardHeader>
-            <CardContent className="px-3 pb-3 pt-0">
-              <div className="grid grid-cols-2 gap-1.5">
+            <CardContent className="px-3 pb-3 pt-0 flex-1 flex flex-col">
+              <div className="grid grid-cols-2 gap-1.5 flex-1">
                 <div 
-                  className="text-center p-2 bg-blue-50 dark:bg-blue-950/20 rounded cursor-pointer hover:bg-blue-100 dark:hover:bg-blue-950/40 transition-colors"
+                  className="text-center p-2 bg-blue-50 dark:bg-blue-950/20 rounded cursor-pointer hover:bg-blue-100 dark:hover:bg-blue-950/40 transition-colors flex flex-col justify-center"
                   onClick={(e) => { e.stopPropagation(); navigate('/meetings?status=scheduled&owner=me'); }}
                 >
                   <p className="text-lg font-bold text-blue-600">{upcomingMeetings?.byStatus?.scheduled || 0}</p>
                   <p className="text-[10px] text-muted-foreground">Scheduled</p>
                 </div>
                 <div 
-                  className="text-center p-2 bg-yellow-50 dark:bg-yellow-950/20 rounded cursor-pointer hover:bg-yellow-100 dark:hover:bg-yellow-950/40 transition-colors"
+                  className="text-center p-2 bg-yellow-50 dark:bg-yellow-950/20 rounded cursor-pointer hover:bg-yellow-100 dark:hover:bg-yellow-950/40 transition-colors flex flex-col justify-center"
                   onClick={(e) => { e.stopPropagation(); navigate('/meetings?status=ongoing&owner=me'); }}
                 >
                   <p className="text-lg font-bold text-yellow-600">{upcomingMeetings?.byStatus?.ongoing || 0}</p>
                   <p className="text-[10px] text-muted-foreground">Ongoing</p>
                 </div>
                 <div 
-                  className="text-center p-2 bg-green-50 dark:bg-green-950/20 rounded cursor-pointer hover:bg-green-100 dark:hover:bg-green-950/40 transition-colors"
+                  className="text-center p-2 bg-green-50 dark:bg-green-950/20 rounded cursor-pointer hover:bg-green-100 dark:hover:bg-green-950/40 transition-colors flex flex-col justify-center"
                   onClick={(e) => { e.stopPropagation(); navigate('/meetings?status=completed&owner=me'); }}
                 >
                   <p className="text-lg font-bold text-green-600">{upcomingMeetings?.byStatus?.completed || 0}</p>
                   <p className="text-[10px] text-muted-foreground">Completed</p>
                 </div>
                 <div 
-                  className="text-center p-2 bg-red-50 dark:bg-red-950/20 rounded cursor-pointer hover:bg-red-100 dark:hover:bg-red-950/40 transition-colors"
+                  className="text-center p-2 bg-red-50 dark:bg-red-950/20 rounded cursor-pointer hover:bg-red-100 dark:hover:bg-red-950/40 transition-colors flex flex-col justify-center"
                   onClick={(e) => { e.stopPropagation(); navigate('/meetings?status=cancelled&owner=me'); }}
                 >
                   <p className="text-lg font-bold text-red-600">{upcomingMeetings?.byStatus?.cancelled || 0}</p>
@@ -1127,38 +1129,38 @@ const UserDashboard = () => {
 
       case "taskReminders":
         return (
-          <Card className="h-full hover:shadow-lg transition-shadow animate-fade-in overflow-hidden">
-            <CardHeader className="flex flex-row items-center justify-between py-2 px-3">
+          <Card className="h-full flex flex-col hover:shadow-lg transition-shadow animate-fade-in overflow-hidden">
+            <CardHeader className="flex flex-row items-center justify-between py-2 px-3 flex-shrink-0">
               <CardTitle className="text-sm font-medium">My Tasks</CardTitle>
               <Button variant="outline" size="sm" className="h-6 text-xs gap-1" onClick={() => { if (!isResizeMode) { setSelectedTask(null); setTaskModalOpen(true); }}}>
                 <Plus className="w-3 h-3" /> Add Task
               </Button>
             </CardHeader>
-            <CardContent className="px-3 pb-3 pt-0">
-              <div className="grid grid-cols-2 gap-1.5">
+            <CardContent className="px-3 pb-3 pt-0 flex-1 flex flex-col">
+              <div className="grid grid-cols-2 gap-1.5 flex-1">
                 <div 
-                  className="text-center p-2 bg-blue-50 dark:bg-blue-950/20 rounded cursor-pointer hover:bg-blue-100 dark:hover:bg-blue-950/40 transition-colors"
+                  className="text-center p-2 bg-blue-50 dark:bg-blue-950/20 rounded cursor-pointer hover:bg-blue-100 dark:hover:bg-blue-950/40 transition-colors flex flex-col justify-center"
                   onClick={(e) => { e.stopPropagation(); navigate('/tasks?status=open&owner=me'); }}
                 >
                   <p className="text-lg font-bold text-blue-600">{taskReminders?.byStatus?.open || 0}</p>
                   <p className="text-[10px] text-muted-foreground">Open</p>
                 </div>
                 <div 
-                  className="text-center p-2 bg-yellow-50 dark:bg-yellow-950/20 rounded cursor-pointer hover:bg-yellow-100 dark:hover:bg-yellow-950/40 transition-colors"
+                  className="text-center p-2 bg-yellow-50 dark:bg-yellow-950/20 rounded cursor-pointer hover:bg-yellow-100 dark:hover:bg-yellow-950/40 transition-colors flex flex-col justify-center"
                   onClick={(e) => { e.stopPropagation(); navigate('/tasks?status=in_progress&owner=me'); }}
                 >
                   <p className="text-lg font-bold text-yellow-600">{taskReminders?.byStatus?.inProgress || 0}</p>
                   <p className="text-[10px] text-muted-foreground">In Progress</p>
                 </div>
                 <div 
-                  className="text-center p-2 bg-green-50 dark:bg-green-950/20 rounded cursor-pointer hover:bg-green-100 dark:hover:bg-green-950/40 transition-colors"
+                  className="text-center p-2 bg-green-50 dark:bg-green-950/20 rounded cursor-pointer hover:bg-green-100 dark:hover:bg-green-950/40 transition-colors flex flex-col justify-center"
                   onClick={(e) => { e.stopPropagation(); navigate('/tasks?status=completed&owner=me'); }}
                 >
                   <p className="text-lg font-bold text-green-600">{taskReminders?.byStatus?.completed || 0}</p>
                   <p className="text-[10px] text-muted-foreground">Completed</p>
                 </div>
                 <div 
-                  className="text-center p-2 bg-gray-50 dark:bg-gray-950/20 rounded cursor-pointer hover:bg-gray-100 dark:hover:bg-gray-950/40 transition-colors"
+                  className="text-center p-2 bg-gray-50 dark:bg-gray-950/20 rounded cursor-pointer hover:bg-gray-100 dark:hover:bg-gray-950/40 transition-colors flex flex-col justify-center"
                   onClick={(e) => { e.stopPropagation(); navigate('/tasks?status=deferred&owner=me'); }}
                 >
                   <p className="text-lg font-bold text-gray-600">{taskReminders?.byStatus?.deferred || 0}</p>
@@ -1171,36 +1173,38 @@ const UserDashboard = () => {
 
       case "recentActivities":
         return (
-          <Card className="h-full animate-fade-in">
-            <CardHeader className="flex flex-row items-center justify-between">
-              <CardTitle className="flex items-center gap-2">
-                <Activity className="w-5 h-5 text-primary" />
+          <Card className="h-full flex flex-col animate-fade-in overflow-hidden">
+            <CardHeader className="flex flex-row items-center justify-between py-2 px-3 flex-shrink-0">
+              <CardTitle className="flex items-center gap-2 text-sm font-medium">
+                <Activity className="w-4 h-4 text-primary" />
                 Recent Activities
               </CardTitle>
-              <Button variant="ghost" size="sm" onClick={() => !isResizeMode && navigate('/notifications')}>View All</Button>
+              <Button variant="ghost" size="sm" className="h-6 text-xs" onClick={() => !isResizeMode && navigate('/notifications')}>View All</Button>
             </CardHeader>
-            <CardContent>
+            <CardContent className="px-3 pb-3 pt-0 flex-1 flex flex-col overflow-hidden">
               {recentActivities && recentActivities.length > 0 ? (
-                <div className="space-y-2 max-h-[200px] overflow-y-auto">
+                <div className="space-y-2 flex-1 overflow-y-auto">
                   {recentActivities.slice(0, 5).map((activity) => (
                     <div key={activity.id} className="flex items-start gap-2 p-2 rounded-lg bg-muted/50">
-                      <div className="w-6 h-6 rounded-full bg-primary/10 flex items-center justify-center flex-shrink-0 mt-0.5">
-                        <Activity className="w-3 h-3 text-primary" />
+                      <div className="w-5 h-5 rounded-full bg-primary/10 flex items-center justify-center flex-shrink-0 mt-0.5">
+                        <Activity className="w-2.5 h-2.5 text-primary" />
                       </div>
                       <div className="min-w-0 flex-1">
                         <p className="text-xs font-medium line-clamp-2">{activity.subject}</p>
-                        <p className="text-xs text-muted-foreground">{format(new Date(activity.activity_date), 'MMM d, HH:mm')}</p>
+                        <p className="text-[10px] text-muted-foreground">{format(new Date(activity.activity_date), 'MMM d, HH:mm')}</p>
                       </div>
                     </div>
                   ))}
                 </div>
               ) : (
-                <EmptyState
-                  title="No recent activities"
-                  description="Activities will appear as you work"
-                  illustration="activities"
-                  variant="compact"
-                />
+                <div className="flex-1 flex items-center justify-center">
+                  <EmptyState
+                    title="No recent activities"
+                    description="Activities will appear as you work"
+                    illustration="activities"
+                    variant="compact"
+                  />
+                </div>
               )}
             </CardContent>
           </Card>
@@ -1208,27 +1212,27 @@ const UserDashboard = () => {
 
       case "emailStats":
         return (
-          <Card className="h-full animate-fade-in">
-            <CardHeader className="flex flex-row items-center justify-between pb-2">
+          <Card className="h-full flex flex-col animate-fade-in overflow-hidden">
+            <CardHeader className="flex flex-row items-center justify-between py-2 px-3 flex-shrink-0">
               <CardTitle className="text-sm font-medium">Email Statistics</CardTitle>
               <Mail className="w-4 h-4 text-blue-600" />
             </CardHeader>
-            <CardContent className="space-y-3">
+            <CardContent className="px-3 pb-3 pt-0 flex-1 flex flex-col justify-center space-y-2">
               <div className="grid grid-cols-3 gap-2 text-center">
-                <div>
+                <div className="flex flex-col justify-center">
                   <p className="text-xl font-bold">{emailStats?.sent || 0}</p>
-                  <p className="text-xs text-muted-foreground">Sent</p>
+                  <p className="text-[10px] text-muted-foreground">Sent</p>
                 </div>
-                <div>
+                <div className="flex flex-col justify-center">
                   <p className="text-xl font-bold text-green-600">{emailStats?.opened || 0}</p>
-                  <p className="text-xs text-muted-foreground">Opened</p>
+                  <p className="text-[10px] text-muted-foreground">Opened</p>
                 </div>
-                <div>
+                <div className="flex flex-col justify-center">
                   <p className="text-xl font-bold text-blue-600">{emailStats?.clicked || 0}</p>
-                  <p className="text-xs text-muted-foreground">Clicked</p>
+                  <p className="text-[10px] text-muted-foreground">Clicked</p>
                 </div>
               </div>
-              <div className="flex justify-between text-xs text-muted-foreground border-t pt-2">
+              <div className="flex justify-between text-[10px] text-muted-foreground border-t pt-2">
                 <span>Open Rate: <span className="font-medium text-foreground">{emailStats?.openRate || 0}%</span></span>
                 <span>Click Rate: <span className="font-medium text-foreground">{emailStats?.clickRate || 0}%</span></span>
               </div>
