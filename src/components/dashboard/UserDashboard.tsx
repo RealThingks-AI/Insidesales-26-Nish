@@ -108,21 +108,13 @@ const UserDashboard = () => {
   useEffect(() => {
     const updateWidth = () => {
       if (containerRef.current) {
-        // Get the actual content width (excluding padding)
-        const styles = getComputedStyle(containerRef.current);
-        const paddingLeft = parseFloat(styles.paddingLeft) || 0;
-        const paddingRight = parseFloat(styles.paddingRight) || 0;
-        const contentWidth = containerRef.current.clientWidth - paddingLeft - paddingRight;
-        setContainerWidth(Math.max(320, contentWidth));
+        // Use full container width for the grid (no subtraction needed)
+        setContainerWidth(containerRef.current.offsetWidth);
       }
     };
-    // Use ResizeObserver for more accurate width tracking
-    const observer = new ResizeObserver(updateWidth);
-    if (containerRef.current) {
-      observer.observe(containerRef.current);
-    }
     updateWidth();
-    return () => observer.disconnect();
+    window.addEventListener('resize', updateWidth);
+    return () => window.removeEventListener('resize', updateWidth);
   }, []);
   
   const { data: userName } = useQuery({
