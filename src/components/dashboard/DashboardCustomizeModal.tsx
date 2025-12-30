@@ -34,29 +34,31 @@ export interface DashboardWidget {
 }
 
 const DEFAULT_WIDGETS: DashboardWidget[] = [
-  // Row 1: Core stat widgets (4x3 each = 12 total)
+  // Row 1: 4 stat widgets spanning full width (3 cols each = 12 total)
   { key: "leads", label: "My Leads", icon: <FileText className="w-4 h-4" />, visible: true, defaultLayout: { x: 0, y: 0, w: 3, h: 2 } },
   { key: "contacts", label: "My Contacts", icon: <Users className="w-4 h-4" />, visible: true, defaultLayout: { x: 3, y: 0, w: 3, h: 2 } },
   { key: "deals", label: "My Deals", icon: <Briefcase className="w-4 h-4" />, visible: true, defaultLayout: { x: 6, y: 0, w: 3, h: 2 } },
-  { key: "accountsSummary", label: "Accounts Summary", icon: <Building2 className="w-4 h-4" />, visible: true, defaultLayout: { x: 9, y: 0, w: 3, h: 2 } },
+  { key: "actionItems", label: "Action Items", icon: <Clock className="w-4 h-4" />, visible: true, defaultLayout: { x: 9, y: 0, w: 3, h: 2 } },
   
-  // Row 2: Action items + Quick Actions + Pipeline
-  { key: "actionItems", label: "Action Items", icon: <Clock className="w-4 h-4" />, visible: true, defaultLayout: { x: 0, y: 2, w: 4, h: 2 } },
-  { key: "quickActions", label: "Quick Actions", icon: <Zap className="w-4 h-4" />, visible: true, defaultLayout: { x: 4, y: 2, w: 4, h: 2 } },
-  { key: "myPipeline", label: "My Pipeline", icon: <TrendingUp className="w-4 h-4" />, visible: true, defaultLayout: { x: 8, y: 2, w: 4, h: 2 } },
+  // Row 2: Quick Actions + Meetings + Tasks (4 cols each = 12 total)
+  { key: "quickActions", label: "Quick Actions", icon: <Zap className="w-4 h-4" />, visible: true, defaultLayout: { x: 0, y: 2, w: 4, h: 2 } },
+  { key: "upcomingMeetings", label: "Upcoming Meetings", icon: <Calendar className="w-4 h-4" />, visible: true, defaultLayout: { x: 4, y: 2, w: 4, h: 2 } },
+  { key: "taskReminders", label: "Task Reminders", icon: <Bell className="w-4 h-4" />, visible: true, defaultLayout: { x: 8, y: 2, w: 4, h: 2 } },
   
-  // Row 3: Today's Agenda + Upcoming Meetings + Task Reminders
-  { key: "todaysAgenda", label: "Today's Agenda", icon: <CalendarClock className="w-4 h-4" />, visible: true, defaultLayout: { x: 0, y: 4, w: 4, h: 3 } },
-  { key: "upcomingMeetings", label: "Upcoming Meetings", icon: <Calendar className="w-4 h-4" />, visible: true, defaultLayout: { x: 4, y: 4, w: 4, h: 3 } },
-  { key: "taskReminders", label: "Task Reminders", icon: <Bell className="w-4 h-4" />, visible: true, defaultLayout: { x: 8, y: 4, w: 4, h: 3 } },
+  // Row 3: Recent Activities full width (12 cols)
+  { key: "recentActivities", label: "Recent Activities", icon: <Activity className="w-4 h-4" />, visible: true, defaultLayout: { x: 0, y: 4, w: 12, h: 3 } },
   
-  // Row 4: Recent Activities + Email Stats
-  { key: "recentActivities", label: "Recent Activities", icon: <Activity className="w-4 h-4" />, visible: true, defaultLayout: { x: 0, y: 7, w: 6, h: 3 } },
-  { key: "emailStats", label: "Email Statistics", icon: <Mail className="w-4 h-4" />, visible: true, defaultLayout: { x: 6, y: 7, w: 6, h: 3 } },
+  // Row 4: Email Stats + Accounts Summary (6 cols each = 12 total)
+  { key: "emailStats", label: "Email Statistics", icon: <Mail className="w-4 h-4" />, visible: true, defaultLayout: { x: 0, y: 7, w: 6, h: 2 } },
+  { key: "accountsSummary", label: "Accounts Summary", icon: <Building2 className="w-4 h-4" />, visible: true, defaultLayout: { x: 6, y: 7, w: 6, h: 2 } },
   
-  // Row 5: Weekly Summary + Follow-Ups Due
-  { key: "weeklySummary", label: "Weekly Summary", icon: <ListTodo className="w-4 h-4" />, visible: true, defaultLayout: { x: 0, y: 10, w: 6, h: 2 } },
-  { key: "followUpsDue", label: "Follow-Ups Due", icon: <ClipboardList className="w-4 h-4" />, visible: true, defaultLayout: { x: 6, y: 10, w: 6, h: 2 } },
+  // Row 5: Pipeline + Today's Agenda (6 cols each = 12 total)
+  { key: "myPipeline", label: "My Pipeline", icon: <TrendingUp className="w-4 h-4" />, visible: true, defaultLayout: { x: 0, y: 9, w: 6, h: 2 } },
+  { key: "todaysAgenda", label: "Today's Agenda", icon: <CalendarClock className="w-4 h-4" />, visible: true, defaultLayout: { x: 6, y: 9, w: 6, h: 2 } },
+  
+  // Row 6: Weekly Summary + Follow-Ups Due (6 cols each = 12 total)
+  { key: "weeklySummary", label: "Weekly Summary", icon: <ListTodo className="w-4 h-4" />, visible: true, defaultLayout: { x: 0, y: 11, w: 6, h: 2 } },
+  { key: "followUpsDue", label: "Follow-Ups Due", icon: <ClipboardList className="w-4 h-4" />, visible: true, defaultLayout: { x: 6, y: 11, w: 6, h: 2 } },
 ];
 
 interface DashboardCustomizeModalProps {
