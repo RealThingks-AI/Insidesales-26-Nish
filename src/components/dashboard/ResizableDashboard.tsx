@@ -220,7 +220,7 @@ export const ResizableDashboard = ({
           height: 100%;
           position: relative;
           overflow: hidden;
-          border-radius: 0.5rem;
+          border-radius: 0.375rem;
           background: hsl(var(--card));
           border: 1px solid hsl(var(--border));
           box-shadow: 0 1px 2px hsl(var(--foreground) / 0.04);
@@ -229,14 +229,115 @@ export const ResizableDashboard = ({
         .dash-content {
           height: 100%;
           width: 100%;
-          overflow: auto;
-          border-radius: 0.5rem;
+          overflow: hidden;
+          border-radius: 0.375rem;
         }
 
         .dash-content > * {
           width: 100%;
           max-width: 100%;
           height: 100%;
+        }
+
+        /* Compact internal card components */
+        .dash-content [class*="CardHeader"],
+        .dash-content header {
+          padding: 0.375rem 0.5rem !important;
+        }
+        .dash-content [class*="CardContent"],
+        .dash-content .px-3 {
+          padding-left: 0.5rem !important;
+          padding-right: 0.5rem !important;
+          padding-bottom: 0.5rem !important;
+          padding-top: 0 !important;
+        }
+        .dash-content [class*="CardTitle"] {
+          font-size: 0.6875rem !important;
+          line-height: 1.2 !important;
+        }
+        
+        /* Compact grid items inside cards */
+        .dash-content .grid {
+          gap: 0.1875rem !important;
+        }
+        .dash-content .grid > div {
+          padding: 0.1875rem !important;
+        }
+        .dash-content .grid .text-lg {
+          font-size: 0.8125rem !important;
+          line-height: 1.1 !important;
+        }
+        .dash-content .grid .text-\\[10px\\] {
+          font-size: 8px !important;
+          line-height: 1 !important;
+        }
+
+        /* Compact buttons inside cards */
+        .dash-content button {
+          height: 1.125rem !important;
+          min-height: 1.125rem !important;
+          padding: 0 0.25rem !important;
+          font-size: 0.5625rem !important;
+          gap: 0.0625rem !important;
+        }
+        .dash-content button svg {
+          width: 0.5rem !important;
+          height: 0.5rem !important;
+        }
+
+        /* Compact text elements */
+        .dash-content .text-lg {
+          font-size: 0.8125rem !important;
+          line-height: 1.1 !important;
+        }
+        .dash-content .text-sm {
+          font-size: 0.625rem !important;
+          line-height: 1.2 !important;
+        }
+        .dash-content .text-xs {
+          font-size: 0.5625rem !important;
+          line-height: 1.2 !important;
+        }
+        .dash-content .text-\\[10px\\] {
+          font-size: 8px !important;
+          line-height: 1 !important;
+        }
+
+        /* Compact spacing */
+        .dash-content .space-y-1\\.5 > * + * {
+          margin-top: 0.1875rem !important;
+        }
+        .dash-content .space-y-2 > * + * {
+          margin-top: 0.25rem !important;
+        }
+        .dash-content .gap-1\\.5,
+        .dash-content .gap-2 {
+          gap: 0.1875rem !important;
+        }
+        .dash-content .p-2,
+        .dash-content .p-1\\.5 {
+          padding: 0.1875rem !important;
+        }
+        .dash-content .py-2 {
+          padding-top: 0.25rem !important;
+          padding-bottom: 0.25rem !important;
+        }
+        .dash-content .pb-3 {
+          padding-bottom: 0.375rem !important;
+        }
+
+        /* Ensure icons scale */
+        .dash-content svg.w-4 {
+          width: 0.625rem !important;
+          height: 0.625rem !important;
+        }
+        .dash-content svg.w-3 {
+          width: 0.5rem !important;
+          height: 0.5rem !important;
+        }
+        .dash-content svg.w-5 {
+          width: 0.75rem !important;
+          height: 0.75rem !important;
         }
 
         .dash-content--locked {
@@ -258,13 +359,13 @@ export const ResizableDashboard = ({
 
         .dash-pending-badge {
           position: absolute;
-          bottom: 6px;
-          left: 6px;
+          bottom: 4px;
+          left: 4px;
           z-index: 25;
           pointer-events: none;
-          font-size: 11px;
+          font-size: 9px;
           line-height: 1;
-          padding: 3px 6px;
+          padding: 2px 4px;
           border-radius: 9999px;
           border: 1px solid hsl(var(--destructive) / 0.3);
           background: hsl(var(--background) / 0.85);
@@ -279,12 +380,12 @@ export const ResizableDashboard = ({
 
         .dash-drag-handle {
           position: absolute;
-          top: 6px;
-          left: 6px;
+          top: 4px;
+          left: 4px;
           z-index: 20;
           cursor: grab;
-          border-radius: 4px;
-          padding: 3px;
+          border-radius: 3px;
+          padding: 2px;
           border: 1px solid hsl(var(--border));
           background: hsl(var(--background) / 0.95);
           backdrop-filter: blur(8px);
@@ -292,6 +393,10 @@ export const ResizableDashboard = ({
         }
         .dash-drag-handle:active {
           cursor: grabbing;
+        }
+        .dash-drag-handle svg {
+          width: 0.75rem !important;
+          height: 0.75rem !important;
         }
 
         .dashboard-grid .react-resizable-handle {
@@ -305,19 +410,19 @@ export const ResizableDashboard = ({
         .dashboard-grid .react-resizable-handle::after {
           content: "";
           position: absolute;
-          width: 8px;
-          height: 8px;
+          width: 6px;
+          height: 6px;
           border-right: 2px solid hsl(var(--primary));
           border-bottom: 2px solid hsl(var(--primary));
-          right: 3px;
-          bottom: 3px;
-          border-radius: 2px;
+          right: 2px;
+          bottom: 2px;
+          border-radius: 1px;
         }
 
         .dashboard-grid .react-grid-item.react-grid-placeholder {
           background: hsl(var(--primary) / 0.15);
           border: 2px dashed hsl(var(--primary) / 0.4);
-          border-radius: 0.5rem;
+          border-radius: 0.375rem;
         }
 
         .dashboard-grid .react-grid-item > .react-resizable-handle {
