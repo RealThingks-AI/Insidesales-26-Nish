@@ -46,11 +46,11 @@ export const ResizableDashboard = ({
     const defaults = new Map<WidgetKey, WidgetLayout>();
     DEFAULT_WIDGETS.forEach((w) => defaults.set(w.key, w.defaultLayout));
 
-    const baseLayout: LayoutItem[] = visibleWidgets.map((key, index): LayoutItem => {
+    const baseLayout: LayoutItem[] = visibleWidgets.map((key): LayoutItem => {
       const saved = widgetLayouts[key];
       const d = defaults.get(key) ?? { x: 0, y: 0, w: 3, h: 2 };
 
-      // Use saved layout if available, otherwise use the default layout from widget config
+      // Ensure width doesn't exceed total columns
       const w = Math.max(2, Math.min(COLS, saved?.w ?? d.w));
       const h = Math.max(2, saved?.h ?? d.h);
       
@@ -58,8 +58,9 @@ export const ResizableDashboard = ({
       const rawX = saved?.x ?? d.x;
       const rawY = saved?.y ?? d.y;
       
-      // Normalize x to never overflow the grid
-      const x = Math.max(0, Math.min(COLS - w, rawX));
+      // CRITICAL: Ensure x + w never exceeds COLS (widget stays within bounds)
+      const maxX = Math.max(0, COLS - w);
+      const x = Math.max(0, Math.min(maxX, rawX));
 
       return {
         i: key,
@@ -69,6 +70,8 @@ export const ResizableDashboard = ({
         h,
         minW: 2,
         minH: 2,
+        maxW: COLS, // Prevent widget from exceeding grid width
+        isBounded: true, // Keep widget within grid bounds during drag
       };
     });
 
@@ -83,7 +86,11 @@ export const ResizableDashboard = ({
       newLayout.forEach((l) => {
         const key = l.i as WidgetKey;
         if (visibleWidgets.includes(key)) {
-          next[key] = { x: l.x, y: l.y, w: l.w, h: l.h };
+          // Ensure saved values respect grid bounds
+          const w = Math.max(2, Math.min(COLS, l.w));
+          const maxX = Math.max(0, COLS - w);
+          const x = Math.max(0, Math.min(maxX, l.x));
+          next[key] = { x, y: l.y, w, h: l.h };
         }
       });
 
@@ -112,7 +119,7 @@ export const ResizableDashboard = ({
           enabled: isResizeMode,
           handle: ".dash-drag-handle",
           threshold: 3,
-          bounded: false,
+          bounded: true, // Keep widgets within grid bounds
         }}
         resizeConfig={{
           enabled: isResizeMode,
