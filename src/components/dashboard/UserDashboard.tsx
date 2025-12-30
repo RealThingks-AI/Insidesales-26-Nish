@@ -1306,7 +1306,7 @@ const UserDashboard = () => {
   };
 
   return (
-    <div className="p-6 space-y-8 w-full" ref={containerRef}>
+    <div className="p-6 space-y-8 w-full max-w-full overflow-hidden" ref={containerRef}>
       {/* Welcome Header */}
       <div className="flex items-center justify-between flex-wrap gap-2">
         <div className="min-w-0 flex-1">

@@ -92,12 +92,15 @@ export const ResizableDashboard = ({
     [visibleWidgets, widgetLayouts, onLayoutChange]
   );
 
+  // Ensure container width is always valid (minimum 320px, uses full available width)
+  const effectiveWidth = Math.max(320, containerWidth || 1200);
+
   return (
-    <div className="dashboard-grid w-full">
+    <div className="dashboard-grid w-full" style={{ width: '100%' }}>
       <GridLayout
-        className="layout w-full"
+        className="layout"
         layout={layout}
-        width={Math.max(320, containerWidth)}
+        width={effectiveWidth}
         gridConfig={{
           cols: COLS,
           rowHeight: ROW_HEIGHT,
@@ -118,6 +121,7 @@ export const ResizableDashboard = ({
         compactor={verticalCompactor}
         onLayoutChange={handleLayoutChange}
         autoSize
+        style={{ width: '100%' }}
       >
         {visibleWidgets.map((key) => {
           const isPendingRemoval = !!pendingWidgetChanges?.has(key);
@@ -178,10 +182,13 @@ export const ResizableDashboard = ({
       <style>{`
         .dashboard-grid {
           width: 100%;
+          max-width: 100%;
+          overflow: visible;
         }
         .dashboard-grid .react-grid-layout {
           min-height: 200px;
           width: 100% !important;
+          max-width: 100% !important;
         }
 
         .dash-item {
