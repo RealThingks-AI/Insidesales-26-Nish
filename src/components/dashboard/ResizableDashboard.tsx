@@ -55,13 +55,13 @@ export const ResizableDashboard = ({
       const saved = widgetLayouts[key];
       const d = defaults.get(key) ?? { x: 0, y: 0, w: 3, h: 2 };
 
-      // Ensure width doesn't exceed total columns
-      const w = Math.max(2, Math.min(COLS, saved?.w ?? d.w));
-      const h = Math.max(2, saved?.h ?? d.h);
+      // ALWAYS use default width/height if saved values are missing or invalid
+      const w = Math.max(2, Math.min(COLS, (saved?.w && saved.w > 0) ? saved.w : d.w));
+      const h = Math.max(2, (saved?.h && saved.h > 0) ? saved.h : d.h);
       
-      // Use saved position or the default layout position
-      const rawX = saved?.x ?? d.x;
-      const rawY = saved?.y ?? d.y;
+      // Use saved position only if valid, otherwise use default
+      const rawX = (saved?.x !== undefined && saved.x >= 0) ? saved.x : d.x;
+      const rawY = (saved?.y !== undefined && saved.y >= 0) ? saved.y : d.y;
       
       // CRITICAL: Ensure x + w never exceeds COLS
       const maxX = Math.max(0, COLS - w);
@@ -117,7 +117,7 @@ export const ResizableDashboard = ({
   );
 
   return (
-    <div className="dashboard-grid">
+    <div className="dashboard-grid" style={{ width: effectiveWidth, maxWidth: '100%' }}>
       <GridLayout
         className="layout"
         layout={layout}
@@ -142,6 +142,7 @@ export const ResizableDashboard = ({
         compactor={verticalCompactor}
         onLayoutChange={handleLayoutChange}
         autoSize
+        style={{ width: effectiveWidth, maxWidth: '100%' }}
       >
         {visibleWidgets.map((key) => {
           const isPendingRemoval = !!pendingWidgetChanges?.has(key);
@@ -203,10 +204,16 @@ export const ResizableDashboard = ({
         .dashboard-grid {
           width: 100%;
           max-width: 100%;
-          overflow-x: hidden;
+          overflow: hidden;
+          box-sizing: border-box;
         }
         .dashboard-grid .react-grid-layout {
           min-height: 200px;
+          width: 100% !important;
+          max-width: 100% !important;
+        }
+        .dashboard-grid .react-grid-item {
+          max-width: 100%;
         }
 
         .dash-item {
