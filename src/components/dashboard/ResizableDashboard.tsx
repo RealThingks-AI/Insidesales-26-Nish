@@ -44,8 +44,20 @@ export const ResizableDashboard = ({
   renderWidget,
   containerWidth,
 }: ResizableDashboardProps) => {
-  // Ensure container width is always valid
-  const effectiveWidth = Math.max(320, containerWidth || 1200);
+  // Don't render with invalid width - show skeleton fallback
+  if (!containerWidth || containerWidth < 320) {
+    return (
+      <div className="dashboard-grid w-full">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 animate-pulse">
+          {visibleWidgets.slice(0, 8).map((key) => (
+            <div key={key} className="h-32 rounded-lg bg-muted/50" />
+          ))}
+        </div>
+      </div>
+    );
+  }
+
+  const effectiveWidth = Math.max(320, containerWidth);
 
   const layout: Layout = useMemo(() => {
     const defaults = new Map<WidgetKey, WidgetLayout>();
@@ -117,9 +129,9 @@ export const ResizableDashboard = ({
   );
 
   return (
-    <div className="dashboard-grid" style={{ width: effectiveWidth, maxWidth: '100%' }}>
+    <div className="dashboard-grid w-full">
       <GridLayout
-        className="layout"
+        className="layout w-full"
         layout={layout}
         width={effectiveWidth}
         gridConfig={{
@@ -142,7 +154,6 @@ export const ResizableDashboard = ({
         compactor={verticalCompactor}
         onLayoutChange={handleLayoutChange}
         autoSize
-        style={{ width: effectiveWidth, maxWidth: '100%' }}
       >
         {visibleWidgets.map((key) => {
           const isPendingRemoval = !!pendingWidgetChanges?.has(key);
@@ -203,23 +214,26 @@ export const ResizableDashboard = ({
       <style>{`
         .dashboard-grid {
           width: 100%;
-          max-width: 100%;
-          overflow: hidden;
           box-sizing: border-box;
+          overflow: visible;
+        }
+        .dashboard-grid .layout {
+          width: 100% !important;
         }
         .dashboard-grid .react-grid-layout {
           min-height: 200px;
           width: 100% !important;
-          max-width: 100% !important;
+          overflow: visible;
         }
         .dashboard-grid .react-grid-item {
           max-width: 100%;
+          overflow: visible;
         }
 
         .dash-item {
           height: 100%;
           position: relative;
-          overflow: hidden;
+          overflow: visible;
           border-radius: 0.5rem;
           background: hsl(var(--card));
           border: 1px solid hsl(var(--border));
