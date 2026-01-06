@@ -6,6 +6,7 @@ import {
   type Layout,
   type LayoutItem,
   verticalCompactor,
+  cloneLayout,
 } from "react-grid-layout";
 
 import "react-grid-layout/css/styles.css";
@@ -13,7 +14,9 @@ import "react-resizable/css/styles.css";
 
 import {
   WidgetKey,
+  DEFAULT_WIDGETS,
   WidgetLayoutConfig,
+  WidgetLayout,
 } from "./DashboardCustomizeModal";
 
 interface ResizableDashboardProps {
@@ -28,12 +31,8 @@ interface ResizableDashboardProps {
 }
 
 const COLS = 12;
-const ROW_HEIGHT = 60;
-const MARGIN: readonly [number, number] = [6, 6];
-
-// Fixed default widget dimensions - 4 columns = 3 widgets per row
-const DEFAULT_WIDGET_W = 4;
-const DEFAULT_WIDGET_H = 2;
+const ROW_HEIGHT = 70;
+const MARGIN: readonly [number, number] = [8, 8];
 
 export const ResizableDashboard = ({
   isResizeMode,
@@ -49,30 +48,43 @@ export const ResizableDashboard = ({
   if (!containerWidth || containerWidth < 320) {
     return (
       <div className="dashboard-grid w-full">
-        <div className="grid grid-cols-3 gap-2 animate-pulse">
-          {visibleWidgets.slice(0, 6).map((key) => (
-            <div key={key} className="h-28 rounded-lg bg-muted/50" />
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 animate-pulse">
+          {visibleWidgets.slice(0, 8).map((key) => (
+            <div key={key} className="h-32 rounded-lg bg-muted/50" />
           ))}
         </div>
       </div>
     );
   }
 
-  // Use floor to avoid any fractional pixel issues
-  const effectiveWidth = Math.floor(Math.max(320, containerWidth));
+  const effectiveWidth = Math.max(320, containerWidth);
 
   const layout: Layout = useMemo(() => {
-    // Build layout with fixed 4-column width for each widget (3 per row)
-    const baseLayout: LayoutItem[] = visibleWidgets.map((key, index): LayoutItem => {
-      const row = Math.floor(index / 3);
-      const col = index % 3;
+    const defaults = new Map<WidgetKey, WidgetLayout>();
+    DEFAULT_WIDGETS.forEach((w) => defaults.set(w.key, w.defaultLayout));
+
+    const baseLayout: LayoutItem[] = visibleWidgets.map((key): LayoutItem => {
+      const saved = widgetLayouts[key];
+      const d = defaults.get(key) ?? { x: 0, y: 0, w: 3, h: 2 };
+
+      // ALWAYS use default width/height if saved values are missing or invalid
+      const w = Math.max(2, Math.min(COLS, (saved?.w && saved.w > 0) ? saved.w : d.w));
+      const h = Math.max(2, (saved?.h && saved.h > 0) ? saved.h : d.h);
       
+      // Use saved position only if valid, otherwise use default
+      const rawX = (saved?.x !== undefined && saved.x >= 0) ? saved.x : d.x;
+      const rawY = (saved?.y !== undefined && saved.y >= 0) ? saved.y : d.y;
+      
+      // CRITICAL: Ensure x + w never exceeds COLS
+      const maxX = Math.max(0, COLS - w);
+      const x = Math.max(0, Math.min(maxX, rawX));
+
       return {
         i: key,
-        x: col * DEFAULT_WIDGET_W,
-        y: row * DEFAULT_WIDGET_H,
-        w: DEFAULT_WIDGET_W,
-        h: DEFAULT_WIDGET_H,
+        x,
+        y: rawY,
+        w,
+        h,
         minW: 2,
         minH: 2,
         maxW: COLS,
@@ -80,21 +92,46 @@ export const ResizableDashboard = ({
       };
     });
 
-    return baseLayout;
-  }, [visibleWidgets]);
+    // Clone layout for compaction
+    const cloned = cloneLayout(baseLayout);
+    
+    // Manually correct bounds - ensure all items fit within COLS
+    cloned.forEach((item) => {
+      if (item.x + item.w > COLS) {
+        item.x = Math.max(0, COLS - item.w);
+      }
+      if (item.x < 0) item.x = 0;
+      if (item.w > COLS) item.w = COLS;
+    });
+    
+    // Compact to avoid gaps/overlaps
+    return verticalCompactor.compact(cloned as Layout, COLS);
+  }, [visibleWidgets, widgetLayouts]);
 
   const handleLayoutChange = useCallback(
     (newLayout: Layout) => {
-      // Layout is managed internally - no external state update needed
-      // The grid handles its own layout
+      const next: WidgetLayoutConfig = { ...widgetLayouts };
+
+      newLayout.forEach((l) => {
+        const key = l.i as WidgetKey;
+        if (visibleWidgets.includes(key)) {
+          // Ensure saved values respect grid bounds
+          const w = Math.max(2, Math.min(COLS, l.w));
+          const maxX = Math.max(0, COLS - w);
+          const x = Math.max(0, Math.min(maxX, l.x));
+          next[key] = { x, y: l.y, w, h: l.h };
+        }
+      });
+
+      onLayoutChange(next);
     },
-    []
+    [visibleWidgets, widgetLayouts, onLayoutChange]
   );
 
   return (
-    <div className="dashboard-grid" style={{ width: effectiveWidth, maxWidth: '100%' }}>
+    <div className="dashboard-grid w-full">
       <GridLayout
-        className="layout"
+        className="layout w-full"
         layout={layout}
         width={effectiveWidth}
         gridConfig={{
@@ -176,21 +213,21 @@ export const ResizableDashboard = ({
 
       <style>{`
         .dashboard-grid {
+          width: 100%;
           box-sizing: border-box;
-          overflow: hidden;
+          overflow: visible;
         }
         .dashboard-grid .layout {
           width: 100% !important;
-          max-width: 100% !important;
         }
         .dashboard-grid .react-grid-layout {
           min-height: 200px;
           width: 100% !important;
-          max-width: 100% !important;
-          overflow: hidden;
+          overflow: visible;
         }
         .dashboard-grid .react-grid-item {
-          overflow: hidden;
+          max-width: 100%;
+          overflow: visible;
         }
 
         .dash-item {
