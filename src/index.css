@@ -194,25 +194,14 @@ All colors MUST be HSL.
   }
 }
 
-/* Shimmer animation for skeleton loading */
+/* Shimmer animation for skeleton loading - keyframe only */
 @keyframes shimmer {
   0% {
-    background-position: -200% 0;
+    transform: translateX(-100%);
   }
   100% {
-    background-position: 200% 0;
+    transform: translateX(100%);
   }
-}
-
-.skeleton-shimmer {
-  background: linear-gradient(
-    90deg,
-    hsl(var(--muted)) 25%,
-    hsl(var(--muted) / 0.5) 50%,
-    hsl(var(--muted)) 75%
-  );
-  background-size: 200% 100%;
-  animation: shimmer 1s ease-in-out infinite;
 }
 
 /* Improved placeholder visibility (#24) */
@@ -352,7 +341,7 @@ All colors MUST be HSL.
 
   /* Skeleton shimmer animation */
   .skeleton-shimmer {
-    @apply bg-muted/60 rounded-lg relative overflow-hidden;
+    @apply bg-muted/40 rounded-lg relative overflow-hidden;
   }
   
   .skeleton-shimmer::after {
@@ -366,16 +355,10 @@ All colors MUST be HSL.
     background: linear-gradient(
       90deg,
       transparent,
-      hsl(var(--muted) / 0.4),
+      hsl(var(--background) / 0.6),
       transparent
     );
-    animation: shimmer 1s infinite;
-  }
-  
-  @keyframes shimmer {
-    100% {
-      transform: translateX(100%);
-    }
+    animation: shimmer 1.5s infinite;
   }
 
   /* Widget card base styling */
