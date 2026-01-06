@@ -40,7 +40,6 @@ import { Calendar } from '@/components/ui/calendar';
 import { Loader2, CalendarIcon, Plus, User } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { AccountModal } from '@/components/AccountModal';
-import { Account } from '@/components/AccountTable';
 import { ContactModal } from '@/components/ContactModal';
 import { LeadModal } from '@/components/LeadModal';
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '@/components/ui/tooltip';
