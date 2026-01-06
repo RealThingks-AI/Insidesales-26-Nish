@@ -460,7 +460,10 @@ export const TaskModal = ({
   return (
     <>
       <Dialog open={open} onOpenChange={onOpenChange} modal={!nested}>
-        <DialogContent className="max-w-2xl max-h-[90vh] overflow-y-auto">
+        <DialogContent 
+          className="max-w-2xl max-h-[90vh] overflow-y-auto"
+          onOpenAutoFocus={(e) => e.preventDefault()}
+        >
           <DialogHeader>
             <DialogTitle className="text-lg font-semibold">
               {task ? 'Edit Task' : 'Create Task'}
