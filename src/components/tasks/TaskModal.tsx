@@ -457,10 +457,24 @@ export const TaskModal = ({
     }
   };
 
+  const handleOpenChange = (newOpen: boolean) => {
+    onOpenChange(newOpen);
+    if (!newOpen && nested) {
+      // Restore pointer events after nested dialog closes
+      setTimeout(() => {
+        document.body.style.pointerEvents = 'auto';
+      }, 100);
+    }
+  };
+
   return (
     <>
-      <Dialog open={open} onOpenChange={onOpenChange}>
-        <DialogContent className="max-w-2xl max-h-[90vh] overflow-y-auto">
+      <Dialog open={open} onOpenChange={handleOpenChange} modal={!nested}>
+        <DialogContent 
+          className={cn("max-w-2xl max-h-[90vh] overflow-y-auto", nested && "z-[60]")}
+          onPointerDownOutside={(e) => { if (nested) e.preventDefault(); }}
+          onInteractOutside={(e) => { if (nested) e.preventDefault(); }}
+        >
           <DialogHeader>
             <DialogTitle className="text-lg font-semibold">
               {task ? 'Edit Task' : 'Create Task'}
