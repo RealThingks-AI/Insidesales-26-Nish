@@ -237,14 +237,18 @@ export const TaskModal = ({
   const handleSubmit = async (data: TaskFormData) => {
     setLoading(true);
     try {
+      // Normalize special placeholder values to undefined
+      const normalizedAssignedTo = data.assigned_to && data.assigned_to !== 'unassigned' ? data.assigned_to : undefined;
+      const normalizedDueTime = data.due_time && data.due_time !== 'none' ? data.due_time : undefined;
+
       const taskData: CreateTaskData & { due_time?: string } = {
         title: data.title,
         description: data.description || undefined,
         status: data.status as TaskStatus,
         priority: data.priority as TaskPriority,
         due_date: data.due_date,
-        due_time: data.due_time || undefined,
-        assigned_to: data.assigned_to || undefined,
+        due_time: normalizedDueTime,
+        assigned_to: normalizedAssignedTo,
         module_type: data.module_type as TaskModuleType | undefined,
         account_id: data.account_id || undefined,
         contact_id: data.contact_id || undefined,
@@ -457,25 +461,20 @@ export const TaskModal = ({
     }
   };
 
-  const handleOpenChange = (newOpen: boolean) => {
-    onOpenChange(newOpen);
-    if (!newOpen && nested) {
-      // Restore pointer events after nested dialog closes
-      setTimeout(() => {
-        document.body.style.pointerEvents = 'auto';
-      }, 100);
-    }
-  };
-
   return (
     <>
-      <Dialog open={open} onOpenChange={handleOpenChange} modal={!nested}>
+      <Dialog open={open} onOpenChange={onOpenChange} modal={true}>
         <DialogContent 
-          className={cn("max-w-2xl max-h-[90vh] overflow-y-auto", nested && "z-[60]")}
-          showOverlay={!nested}
-          onOpenAutoFocus={(e) => { if (nested) e.preventDefault(); }}
-          onPointerDownOutside={(e) => { if (nested) e.preventDefault(); }}
-          onInteractOutside={(e) => { if (nested) e.preventDefault(); }}
+          className="max-w-2xl max-h-[90vh] overflow-y-auto animate-in fade-in-0 zoom-in-95 duration-200"
+          onOpenAutoFocus={(e) => {
+            // Ensure focus is properly set when dialog opens
+            setTimeout(() => {
+              const firstInput = document.querySelector('[data-radix-dialog-content] input:not([disabled])') as HTMLInputElement;
+              if (firstInput) {
+                firstInput.focus();
+              }
+            }, 50);
+          }}
         >
           <DialogHeader>
             <DialogTitle className="text-lg font-semibold">

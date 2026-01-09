@@ -62,6 +62,94 @@ async function getAccessToken(): Promise<string> {
   return data.access_token as string;
 }
 
+// Wrap email content with proper inline styles to match Outlook formatting exactly
+function wrapEmailContent(htmlBody: string): string {
+  let processed = htmlBody;
+  
+  // Step 1: Convert Quill alignment classes to inline styles BEFORE removing classes
+  processed = processed.replace(/class="([^"]*ql-align-center[^"]*)"/gi, (match, classes) => {
+    const remaining = classes.replace(/ql-align-center/gi, '').trim();
+    return remaining ? `class="${remaining}" style="text-align: center;"` : 'style="text-align: center;"';
+  });
+  processed = processed.replace(/class="([^"]*ql-align-right[^"]*)"/gi, (match, classes) => {
+    const remaining = classes.replace(/ql-align-right/gi, '').trim();
+    return remaining ? `class="${remaining}" style="text-align: right;"` : 'style="text-align: right;"';
+  });
+  processed = processed.replace(/class="([^"]*ql-align-justify[^"]*)"/gi, (match, classes) => {
+    const remaining = classes.replace(/ql-align-justify/gi, '').trim();
+    return remaining ? `class="${remaining}" style="text-align: justify;"` : 'style="text-align: justify;"';
+  });
+  
+  // Step 2: Convert Quill font classes to inline styles
+  const fontMappings: Record<string, string> = {
+    'ql-font-arial': "font-family: Arial, Helvetica, sans-serif;",
+    'ql-font-times-new-roman': "font-family: 'Times New Roman', Times, serif;",
+    'ql-font-georgia': "font-family: Georgia, serif;",
+    'ql-font-verdana': "font-family: Verdana, Geneva, sans-serif;",
+    'ql-font-courier-new': "font-family: 'Courier New', Courier, monospace;",
+    'ql-font-trebuchet-ms': "font-family: 'Trebuchet MS', sans-serif;",
+  };
+  
+  for (const [className, style] of Object.entries(fontMappings)) {
+    const regex = new RegExp(`class="([^"]*${className}[^"]*)"`, 'gi');
+    processed = processed.replace(regex, (match, classes) => {
+      const remaining = classes.replace(new RegExp(className, 'gi'), '').trim();
+      return remaining ? `class="${remaining}" style="${style}"` : `style="${style}"`;
+    });
+  }
+  
+  // Step 3: Convert Quill size classes to inline styles
+  const sizeMappings: Record<string, string> = {
+    'ql-size-small': 'font-size: 10pt;',
+    'ql-size-large': 'font-size: 14pt;',
+    'ql-size-huge': 'font-size: 18pt;',
+  };
+  
+  for (const [className, style] of Object.entries(sizeMappings)) {
+    const regex = new RegExp(`class="([^"]*${className}[^"]*)"`, 'gi');
+    processed = processed.replace(regex, (match, classes) => {
+      const remaining = classes.replace(new RegExp(className, 'gi'), '').trim();
+      return remaining ? `class="${remaining}" style="${style}"` : `style="${style}"`;
+    });
+  }
+  
+  // Step 4: Remove any remaining ql-* classes
+  processed = processed.replace(/class="ql-[^"]*"/gi, '');
+  processed = processed.replace(/class=""/gi, '');
+  
+  // Step 5: Style all paragraphs uniformly (handle p with any attributes)
+  // First handle p tags with existing style attribute - merge our styles
+  processed = processed.replace(/<p([^>]*)\s+style="([^"]*)"([^>]*)>/gi, (match, before, existingStyle, after) => {
+    return `<p${before} style="margin: 0; padding: 0; line-height: 1.15; ${existingStyle}"${after}>`;
+  });
+  // Then handle p tags with other attributes but no style
+  processed = processed.replace(/<p(\s+[^>]*[^\/])>/gi, (match, attrs) => {
+    if (attrs.includes('style=')) return match; // Already processed
+    return `<p${attrs} style="margin: 0; padding: 0; line-height: 1.15;">`;
+  });
+  // Handle plain <p> tags
+  processed = processed.replace(/<p>/gi, '<p style="margin: 0; padding: 0; line-height: 1.15;">');
+  
+  // Step 6: Handle empty paragraphs (Quill's line breaks) - minimal height spacer
+  processed = processed.replace(/<p[^>]*><br\s*\/?><\/p>/gi, '<p style="margin: 0; padding: 0; line-height: 0.5; font-size: 8pt;">&nbsp;</p>');
+  
+  // Step 7: Style lists properly (keep semantic ul/ol/li with Outlook-friendly styles)
+  processed = processed.replace(/<ul[^>]*>/gi, '<ul style="margin: 0 0 0 0; padding: 0 0 0 25px; list-style-type: disc; list-style-position: outside;">');
+  processed = processed.replace(/<ol[^>]*>/gi, '<ol style="margin: 0 0 0 0; padding: 0 0 0 25px; list-style-type: decimal; list-style-position: outside;">');
+  processed = processed.replace(/<li[^>]*>/gi, '<li style="margin: 0; padding: 0; line-height: 1.15;">');
+  
+  // Step 8: Style headers compactly
+  processed = processed.replace(/<h1[^>]*>/gi, '<h1 style="margin: 0 0 8px 0; padding: 0; font-size: 16pt; font-weight: bold; line-height: 1.15;">');
+  processed = processed.replace(/<h2[^>]*>/gi, '<h2 style="margin: 0 0 6px 0; padding: 0; font-size: 14pt; font-weight: bold; line-height: 1.15;">');
+  processed = processed.replace(/<h3[^>]*>/gi, '<h3 style="margin: 0 0 4px 0; padding: 0; font-size: 12pt; font-weight: bold; line-height: 1.15;">');
+  
+  // Step 9: Clean br tags
+  processed = processed.replace(/<br\s*\/?>/gi, '<br>');
+
+  // Return as HTML fragment with Outlook-default font (Calibri 11pt, line-height matching Outlook)
+  return `<div style="font-family: Calibri, Arial, Helvetica, sans-serif; font-size: 11pt; line-height: 1.15; color: #000000;">${processed}</div>`;
+}
+
 // Rewrite links in HTML body for click tracking
 function rewriteLinksForTracking(htmlBody: string, emailHistoryId: string, supabaseUrl: string): string {
   const clickTrackingBaseUrl = `${supabaseUrl}/functions/v1/track-email-click`;
@@ -102,8 +190,11 @@ async function sendEmail(accessToken: string, emailRequest: EmailRequest, emailH
   const supabaseUrl = Deno.env.get("SUPABASE_URL")!;
   const trackingPixelUrl = `${supabaseUrl}/functions/v1/track-email-open?id=${emailHistoryId}`;
   
+  // First wrap the content with proper inline styles for email clients
+  const wrappedBody = wrapEmailContent(emailRequest.body);
+  
   // Rewrite links for click tracking
-  const bodyWithClickTracking = rewriteLinksForTracking(emailRequest.body, emailHistoryId, supabaseUrl);
+  const bodyWithClickTracking = rewriteLinksForTracking(wrappedBody, emailHistoryId, supabaseUrl);
   
   // Embed tracking pixel in email body (append to HTML content)
   const trackingPixel = `<img src="${trackingPixelUrl}" width="1" height="1" style="display:none;" alt="" />`;

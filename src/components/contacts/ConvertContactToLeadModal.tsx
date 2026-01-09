@@ -23,10 +23,7 @@ interface Contact {
   email?: string;
   phone_no?: string;
   linkedin?: string;
-  website?: string;
   contact_source?: string;
-  industry?: string;
-  region?: string;
   description?: string;
   contact_owner?: string;
 }
@@ -165,10 +162,7 @@ export const ConvertContactToLeadModal = ({
       if (contact.email) leadData.email = contact.email;
       if (contact.phone_no) leadData.phone_no = contact.phone_no;
       if (contact.linkedin) leadData.linkedin = contact.linkedin;
-      if (contact.website) leadData.website = contact.website;
       if (contact.contact_source) leadData.contact_source = contact.contact_source;
-      if (contact.industry) leadData.industry = contact.industry;
-      if (contact.region) leadData.country = contact.region;
       if (contact.description) leadData.description = contact.description;
       if (contact.contact_owner) leadData.contact_owner = contact.contact_owner;
 
@@ -228,7 +222,7 @@ export const ConvertContactToLeadModal = ({
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent className="max-w-lg">
+      <DialogContent className="max-w-2xl">
         <DialogHeader>
           <DialogTitle className="flex items-center gap-2">
             <ArrowRight className="h-5 w-5 text-primary" />
