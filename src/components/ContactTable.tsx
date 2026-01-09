@@ -173,7 +173,7 @@ export const ContactTable = forwardRef<ContactTableRef, ContactTableProps>(({
   
   const [currentPage, setCurrentPage] = useState(1);
   const [itemsPerPage, setItemsPerPage] = useState(25);
-  const [sortField, setSortField] = useState<string | null>(null);
+  const [sortField, setSortField] = useState<string | null>('contact_name');
   const [sortDirection, setSortDirection] = useState<'asc' | 'desc'>('asc');
   const [isBulkDeleting, setIsBulkDeleting] = useState(false);
   
