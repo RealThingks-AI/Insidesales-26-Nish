@@ -63,7 +63,6 @@ interface Contact {
   modified_by?: string;
   tags?: string[];
   email_opens?: number;
-  email_clicks?: number;
   engagement_score?: number;
   last_contacted_at?: string;
 }
@@ -753,8 +752,6 @@ export const ContactTable = forwardRef<ContactTableRef, ContactTableProps>(({
                           )
                         ) : column.field === 'email_opens' ? (
                           <span className="text-center w-full block">{contact.email_opens ?? 0}</span>
-                        ) : column.field === 'email_clicks' ? (
-                          <span className="text-center w-full block">{contact.email_clicks ?? 0}</span>
                         ) : column.field === 'last_contacted_at' ? (
                           contact.last_contacted_at ? (
                             <span className="text-sm">{formatDateTimeStandard(contact.last_contacted_at)}</span>
