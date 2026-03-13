@@ -411,7 +411,7 @@ export const createHeaderMapper = (tableName: string) => {
       'company': 'company_name',
       'organization': 'company_name',
       'job_title': 'position',
-      'title': tableName === 'meetings' ? 'title' : 'position',
+      'title': 'position',
       'phone': 'phone_no',
       'telephone': 'phone_no',
       'mobile': 'mobile_no',
