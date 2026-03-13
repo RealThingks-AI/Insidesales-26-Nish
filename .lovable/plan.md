@@ -1,91 +1,48 @@
 
 
-## Fix Note Editor Bullet Point & Stakeholders Layout Issues
+## Updated Plan: Leads & Meetings Module Cleanup
 
-### Issues Found
+### Analysis Summary
 
-1. **Bullet point moves when typing**: `autoFocus` on the Textarea (line 633) places the cursor at position 0 (before `"• "`), so typing inserts text before the bullet instead of after it.
+**Meetings table**: Does NOT exist in the database. No table to drop. Only dead code references in 4 import/export utility files need cleanup.
 
-2. **Notes panel lacks proper scrollbar**: The notes summary panel (line 580-679) has a `max-h-[280px]` on the inner div but the outer wrapper has no scroll constraint, so it still pushes content.
+**Leads table**: EXISTS and is deeply linked — cannot be safely dropped:
+- `lead_action_items` table has FK → `leads(id)` with CASCADE
+- `email_history.lead_id` references leads
+- `notifications.lead_id` references leads  
+- 3 DB trigger functions query the leads table: `create_action_item_notification`, `create_lead_notification`, `create_unified_action_item_notification`
+- Edge functions (`create-backup`, `restore-backup`, `scheduled-backup`, `user-admin`) all reference leads
+- Dropping leads would break triggers, notifications, backups, and user deletion
 
-3. **Stakeholders section grows unbounded**: The `StakeholdersSection` component has no max-height. When the Notes panel is open with many notes, it consumes all vertical space, squishing the Updates and Action Items sections to near-zero height.
+**Deals "Lead" stage is SAFE**: The Lead stage in the Deals module uses `lead_name` and `lead_owner` as TEXT fields directly on the `deals` table — they are NOT foreign keys to the `leads` table. Zero impact from any leads table changes.
 
-### Changes (single file: `src/components/DealExpandedPanel.tsx`)
+### Changes to Make
 
-#### Fix 1: Bullet cursor positioning (line 628-634)
+#### 1. Remove dead "meetings" code from import/export (4 files)
 
-Replace `autoFocus` on the Textarea with a `ref` callback that focuses the element AND places the cursor at the end of the text (after `"• "`):
+**`src/hooks/import-export/columnConfig.ts`** — Remove the `meetings` config block (lines 125-148)
 
-```tsx
-<Textarea
-  value={noteText}
-  onChange={(e) => setNoteText(e.target.value)}
-  onKeyDown={handleNoteKeyDown}
-  className="min-h-[100px] text-xs resize-none"
-  ref={(el) => {
-    if (el) {
-      el.focus();
-      const len = el.value.length;
-      el.selectionStart = len;
-      el.selectionEnd = len;
-    }
-  }}
-/>
-```
+**`src/hooks/import-export/duplicateChecker.ts`** — Remove `tableName === 'meetings'` branch (lines 92-93)
 
-#### Fix 2: Constrain Stakeholders section height
+**`src/hooks/import-export/valueValidator.ts`** — Remove all `tableName === 'meetings'` conditionals (lines 119-121, 127-128, 134-135, 140-141)
 
-Wrap the StakeholdersSection output in a container with `max-h` and `overflow-y-auto` so it scrolls when content is large. Change the outer div (line 462) from:
+**`src/hooks/import-export/headerMapper.ts`** — Remove `tableName === 'meetings'` ternaries (lines 414, 422), use the non-meetings value directly
 
-```tsx
-<div className="px-3 pt-1.5 pb-1">
-```
+#### 2. Keep leads table and all infrastructure — no changes
 
-to:
+The `leads` table, `lead_action_items` table, all triggers, edge functions, and notification logic remain untouched. No UI page will be created for leads.
 
-```tsx
-<div className="px-3 pt-1.5 pb-1 max-h-[45%] overflow-y-auto shrink-0">
-```
+#### 3. No database migrations needed
 
-However, since this is not inside a flex parent that uses percentage heights well, a better approach is to change the parent layout. The parent (line 1182) is:
+No tables to drop. No schema changes.
 
-```tsx
-<div className="flex-1 min-h-0 flex flex-col overflow-hidden gap-1">
-```
+### Impact on Existing Data
 
-The fix: Make the StakeholdersSection a flex item that can shrink, and give it a max-height so it doesn't dominate. Change line 1184 from:
-
-```tsx
-<StakeholdersSection deal={deal} queryClient={queryClient} />
-```
-
-to wrap it in a constrained container:
-
-```tsx
-<div className="shrink-0 max-h-[40%] overflow-y-auto">
-  <StakeholdersSection deal={deal} queryClient={queryClient} />
-</div>
-```
-
-This ensures:
-- Stakeholders section gets at most 40% of the panel height
-- When content exceeds that, a scrollbar appears
-- Updates and Action Items always get their fair share of space
-
-#### Fix 3: Ensure notes panel scrolls properly
-
-The notes summary panel (line 596) already has `max-h-[280px] overflow-y-auto`, but when inside the constrained container from Fix 2, this works correctly. No additional change needed here -- the outer scroll from Fix 2 handles it.
-
-### Summary
-
-| Change | Line(s) | Description |
-|--------|---------|-------------|
-| Replace `autoFocus` with ref callback | 628-634 | Cursor placed after bullet on open |
-| Wrap StakeholdersSection in scrollable container | 1184 | Max 40% height with scrollbar |
-
-### Technical Notes
-
-- The ref callback fires on every render, but since `el.focus()` is idempotent when already focused, this is harmless
-- The `max-h-[40%]` works because the parent has `flex-1 min-h-0` which resolves to an actual pixel height
-- Updates and Action Items sections keep their `flex-1 min-h-0` with `h-[220px]`, ensuring they share remaining space equally
+| Component | Impact |
+|-----------|--------|
+| Deals "Lead" stage | **None** — uses text fields on `deals` table, not FK to `leads` |
+| Deal pipeline (Lead → Won) | **None** — completely independent |
+| Existing deals data | **None** — no fields modified |
+| Backup/restore | **None** — leads table stays |
+| Notifications | **None** — triggers stay |
 
