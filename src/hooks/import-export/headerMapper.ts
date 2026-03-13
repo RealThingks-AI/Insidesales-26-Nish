@@ -419,7 +419,7 @@ export const createHeaderMapper = (tableName: string) => {
       'employees': 'no_of_employees',
       'revenue': 'annual_revenue',
       'source': 'contact_source',
-      'status': tableName === 'meetings' ? 'status' : 'lead_status',
+      'status': 'lead_status',
       'lead': 'lead_status'
     };
     
